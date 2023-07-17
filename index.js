@@ -32,7 +32,7 @@
         var queryStringData = {
             response_type : "token",
             client_id : CLIENT_ID,
-            redirect_uri : "https://www.google.es/"
+            redirect_uri : "https://wilrey.github.io/makeCall/call.html"
         }
 
         window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
