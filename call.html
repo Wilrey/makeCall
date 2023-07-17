@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Phone Number Verification</title>
+  <title>Phone Number Dialing</title>
   <style>
     .hidden {
       display: none;
@@ -19,46 +19,65 @@
     </form>
     <div class="alert hidden"></div>
   </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
   <script>
+    // Author: Wilfredo Fernandez
+
+    // Selecting DOM elements
     const form = document.querySelector("#login");
     const phoneInput = document.querySelector("#phone");
     const info = document.querySelector(".alert");
-      const ENVIRONMENT = 'mypurecloud.de';
 
+    // Constant for the PureCloud environment
+    const ENVIRONMENT = 'mypurecloud.de';
+
+    // Add event listener to the form
     form.addEventListener("submit", process);
-  function getParameterByName(name) {
-    name = name.replace(/[\\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
-      results = regex.exec(location.hash);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-  }
-    
+
+    /**
+     * Get the value of a query parameter from the URL hash
+     * @param {string} name - The name of the query parameter
+     * @returns {string} - The value of the query parameter
+     */
+    function getParameterByName(name) {
+      const regex = new RegExp(`[\\#&]${name}=([^&#]*)`);
+      const results = regex.exec(location.hash);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    /**
+     * Process the form submission
+     * @param {Event} event - The form submission event
+     */
     function process(event) {
       event.preventDefault();
       const phoneNumber = phoneInput.value;
       const queue = '07b54d9e-b08b-4587-a4bd-7e0055ebed0b';
-      
+
+      // Display information message
       info.classList.remove("hidden");
       info.innerHTML = `Placing call to Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
-      placeCall(phoneNumber,queue);
+
+      // Place the call
+      placeCall(phoneNumber, queue);
     }
 
-function placeCall(phone,queue){
-        var token = getParameterByName('access_token');
-    $.ajax({
-      url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
-      type: "post",
-      data: JSON.stringify({"callFromQueueId": queue,"phoneNumber": phone}),
-      contentType:"application/json; charset=utf-8",
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Authorization', 'bearer ' + token);
-      },
-      success: function(data) {
-        console.log(data);
-      }
-    });
-}
+    /**
+     * Place a call using the PureCloud Conversations API
+     * @param {string} phone - The phone number to call
+     * @param {string} queue - The ID of the queue
+     */
+    function placeCall(phone, queue) {
+      const token = getParameterByName('access_token');
+      $.ajax({
+        url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
+        type: "post",
+        data: JSON.stringify({ callFromQueueId: queue, phoneNumber: phone }),
+        contentType: "application/json; charset=utf-8",
+        beforeSend: xhr => xhr.setRequestHeader('Authorization', `bearer ${token}`),
+        success: data => console.log(data)
+      });
+    }
   </script>
 </body>
 </html>
