@@ -73,7 +73,6 @@
         url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
         type: "post",
         data: JSON.stringify({ callFromQueueId: queue, phoneNumber: phone }),
-        contentType: "application/json; charset=utf-8",
         beforeSend: xhr => xhr.setRequestHeader('Authorization', `bearer ${token}`),
         success: data => console.log(data)
       });
