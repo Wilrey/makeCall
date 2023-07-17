@@ -24,15 +24,41 @@
     const form = document.querySelector("#login");
     const phoneInput = document.querySelector("#phone");
     const info = document.querySelector(".alert");
+      const ENVIRONMENT = 'mypurecloud.de';
 
     form.addEventListener("submit", process);
-
+  function getParameterByName(name) {
+    name = name.replace(/[\\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.hash);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+    
     function process(event) {
       event.preventDefault();
       const phoneNumber = phoneInput.value;
+      const queue = '07b54d9e-b08b-4587-a4bd-7e0055ebed0b';
+      
       info.classList.remove("hidden");
-      info.innerHTML = `Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
+      info.innerHTML = `Placing call to Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
     }
+
+    const platformClient = require("purecloud-platform-client-v2");
+
+function placeCall(phone,queue){
+        var token = getParameterByName('access_token');
+    $.ajax({
+      url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
+      type: "post",
+      data: {"callFromQueueId": queue,"phoneNumber": phone},
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'bearer ' + token);
+      },
+      success: function(data) {
+        console.log(data);
+      }
+    });
+}
   </script>
 </body>
 </html>
