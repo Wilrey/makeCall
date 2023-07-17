@@ -71,6 +71,8 @@
       const token = getParameterByName('access_token');
       $.ajax({
         url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
+        contentType: "application/json",
+        datatype : "application/json",
         type: "post",
         data: JSON.stringify({ callFromQueueId: queue, phoneNumber: phone }),
         beforeSend: xhr => xhr.setRequestHeader('Authorization', `bearer ${token}`),
