@@ -41,6 +41,7 @@
       
       info.classList.remove("hidden");
       info.innerHTML = `Placing call to Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
+      placeCall(phoneNumber,queue);
     }
 
 function placeCall(phone,queue){
