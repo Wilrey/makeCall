@@ -50,7 +50,7 @@ function placeCall(phone,queue){
       url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
       type: "post",
       data: {"callFromQueueId": queue,"phoneNumber": phone},
-      header: {"Authorization": "Bearer "+ token }
+      header: {"Authorization": "Bearer "+ token },
       success: function(data) {
         console.log(data);
       }
