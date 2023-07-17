@@ -2,15 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Phone Number Verification</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <script src="call.js"></script>
   <div class="container">
     <form id="login">
       <p>Enter your phone number (E.164 format):</p>
       <input id="phone" type="tel" name="phone" required>
       <input type="submit" class="btn" value="Verify">
     </form>
+    <div class="alert hidden"></div>
   </div>
+
+  <script>
+    const form = document.querySelector("#login");
+    const phoneInput = document.querySelector("#phone");
+    const info = document.querySelector(".alert");
+
+    form.addEventListener("submit", process);
+
+    function process(event) {
+      event.preventDefault();
+      const phoneNumber = phoneInput.value;
+      info.classList.remove("hidden");
+      info.innerHTML = `Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
+    }
+  </script>
 </body>
 </html>
