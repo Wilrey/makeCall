@@ -3,11 +3,6 @@
   <head>
     <meta charset="UTF-8">
     <title>Phone Number Verification</title>
-    <style>
-      .hidden {
-        display: none;
-      }
-    </style>
   </head>
   <body>
     <div class="container">
@@ -17,15 +12,21 @@
         <input id="phone" type="tel" name="phone" required>
         <input type="submit" class="btn" value="Call">
       </form>
-      <div class="alert hidden"></div>
+      <div class="alert"></div>
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script>
+      
+      // Make sure to enable Placing calls with another app? on Call -> Settings -> Phone Settings
+      // Putting CSS, JavaScript, and HTML all together, to show all the code on a single page
+	    
       const CLIENT_ID = 'ee4696b8-16c4-40ce-87ae-7322597880ac';
       const ENVIRONMENT = 'mypurecloud.de';
       const form = document.querySelector("#login");
       const phoneInput = document.querySelector("#phone");
       const info = document.querySelector(".alert");
+
       form.addEventListener("submit", process);
 
       function getParameterByName(name) {
@@ -39,9 +40,7 @@
         event.preventDefault();
         const phoneNumber = phoneInput.value;
         const queue = '07b54d9e-b08b-4587-a4bd-7e0055ebed0b';
-        info.classList.remove("hidden");
-        info.innerHTML = `Placing call to Phone number in E.164 format: 
-						<strong>${phoneNumber}</strong>`;
+        info.innerHTML = `Placing call to Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
         placeCall(phoneNumber, queue);
       }
 
@@ -70,7 +69,7 @@
           results = regex.exec(location.hash);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
-      
+
       if (window.location.hash) {
         var token = getParameterByName('access_token');
         console.log("token" + token);
