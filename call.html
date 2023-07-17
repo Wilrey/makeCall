@@ -49,7 +49,7 @@ function placeCall(phone,queue){
     $.ajax({
       url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
       type: "post",
-      data: {"callFromQueueId": queue,"phoneNumber": phone},
+      data: JSON.stringify({"callFromQueueId": queue,"phoneNumber": phone}),
       contentType:"application/json; charset=utf-8",
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'bearer ' + token);
