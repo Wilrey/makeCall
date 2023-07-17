@@ -43,8 +43,6 @@
       info.innerHTML = `Placing call to Phone number in E.164 format: <strong>${phoneNumber}</strong>`;
     }
 
-    const platformClient = require("purecloud-platform-client-v2");
-
 function placeCall(phone,queue){
         var token = getParameterByName('access_token');
     $.ajax({
