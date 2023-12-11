@@ -116,7 +116,7 @@ if (window.location.hash) {
   const queryStringData = {
     response_type: "token",
     client_id: CLIENT_ID,
-    redirect_uri: "https://wilrey.github.io/test/index.html"
+    redirect_uri: REDIRECT_URI
   };
   window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
 }
