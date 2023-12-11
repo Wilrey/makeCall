@@ -81,6 +81,8 @@
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
       },
+      data: JSON.stringify(requestData),
+      contentType: 'application/json',
       success: function(data) {
         displayData(data);
       }
