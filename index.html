@@ -17,11 +17,33 @@
 <button onclick="refreshData()">Refresh Data</button>
 
 <script>
-  const CLIENT_ID = 'ee4696b8-16c4-40ce-87ae-7322597880ac';
+  const CLIENT_ID = '50999a4b-409c-4846-a249-4357e0e293a5';
   const ENVIRONMENT = 'mypurecloud.de';
   const API_ENDPOINT = 'https://api.mypurecloud.de/api/v2/analytics/queues/observations/query';
   const REDIRECT_URI = 'https://wilrey.github.io/test/index.html';
 
+  const queues = {
+    "72889920-75ef-41d9-bc09-6fa8d402963f": { name: "SI24_PAT-PRESTACIONES_ESSD0206" },
+    "a9aa307e-9683-4403-b7b5-db3cf1156cca": { name: "SI24_AUT-ASISTENCIAVIAJE_ESSD0201" },
+    "72937585-4272-420d-b7fc-dd271853615a": { name: "SI24_AUT-GESTCARTERA_ESSD0301" },
+    "5fd9379a-edff-4c1b-bf95-e2bc4252fb9e": { name: "SI24_PAT-GESTCARTERA_ESSD0301" },
+    "02898175-6c56-4032-afd3-60e3351d19ee": { name: "SI24_AUT-PRESTACIONES_ESSD0205" },
+    "816bab0a-860b-4465-89b0-c12cc57a1a1f": { name: "SI24_SAL-PRESTACIONES_ESSD0203" },
+    "e163a627-66b9-49f5-ba4a-a10c72856187": { name: "SI24_VER-GESTCARTERAAUT_ESSD0301" },
+    "1d8dd444-f8f8-4767-a73e-a64c4f125f46": { name: "STT_MIX_AUTOS_ESSD8601" },
+    "592cc651-2aac-4a11-a1ec-12dd7ffb8cb9": { name: "SI24_FILIAL-MAPFRE_ESSD9999" },
+    "857e77a5-0946-4d53-8c6d-8c017afaca87": { name: "SI24_AUT-RETENCION_ESSD0105" },
+    "726a2b95-64ee-4745-b44a-52798e529214": { name: "AGR_AUTOS_ESSD9999" },
+    "cb88a966-9763-48f4-91d3-594b38d91ce3": { name: "CMP_COV_BGP_ESSD8401" },
+    "8be4f3fd-cc07-49f2-86a1-54d2206ea7c0": { name: "CST_CORREDORES_ESSD8701" },
+    "163c087f-b050-4fa7-b8dd-c4b005c7df37": { name: "CRA_INT_ESSD9999" },
+    "4d4c928b-dac8-4dd6-bccd-7450c5936c15": { name: "CRR_MKT_RECIBOSSANTANDER_ESSD9999" }
+};
+
+  const predicates = Object.keys(queues).map(queueId => ({
+  dimension: "queueId",
+  value: queueId
+}));
   const requestData = {
     metrics: [
       "oWaiting",
@@ -37,16 +59,7 @@
       clauses: [
         {
           type: "or",
-          predicates: [
-            {
-              dimension: "queueId",
-              value: "47bfab0c-4a64-4689-b307-aab540680985"
-            },
-            {
-              dimension: "queueId",
-              value: "b2231d1f-21ca-435b-81fa-6665b3e3dfd6"
-            }
-          ]
+          predicates: predicates
         }
       ]
     },
@@ -116,7 +129,7 @@ function displayData(data) {
       const longestWaitingDate = getObservationDate(dataItems);
 
       const row = `<tr>
-                    <td>${group.queueId}</td>
+                    <td>${queues[group.queueId].name}</td>
                     <td>${mediaType}</td>
                     <td>${getMetricValue(dataItems, "oInteracting")}</td>
                     <td>${getMetricValue(dataItems, "oWaiting")}</td>
