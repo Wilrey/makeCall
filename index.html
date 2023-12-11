@@ -11,16 +11,7 @@
 <h1>Genesys Cloud API Demo</h1>
 
 <table border="1">
-  <thead>
-    <tr>
-      <th>Queue Name</th>
-      <th>Interactions</th>
-      <th>Waiting</th>
-      <th>Longest Waiting</th>
-      <th>Agents in Queue</th>
-    </tr>
-  </thead>
-  <tbody id="queueData"></tbody>
+<tbody id="queueData"></tbody>
 </table>
 
 <button onclick="refreshData()">Refresh Data</button>
@@ -89,17 +80,31 @@
     });
   }
 
-  function displayData(data) {
+function displayData(data) {
   const queueData = $("#queueData");
   queueData.empty();
 
   if (data.results && Array.isArray(data.results)) {
+    // Display header with Queue ID and MediaType columns
+    const headerRow = `<tr>
+                        <th>Queue ID</th>
+                        <th>Media Type</th>
+                        <th>Interacting</th>
+                        <th>Waiting</th>
+                        <th>Alerting</th>
+                        <th>Member Users</th>
+                      </tr>`;
+    queueData.append(headerRow);
+
     data.results.forEach(result => {
       const group = result.group;
       const dataItems = result.data;
 
+      const mediaType = group.mediaType || ''; // Handle cases where mediaType might be undefined
+
       const row = `<tr>
                     <td>${group.queueId}</td>
+                    <td>${mediaType}</td>
                     <td>${getMetricValue(dataItems, "oInteracting")}</td>
                     <td>${getMetricValue(dataItems, "oWaiting")}</td>
                     <td>${getMetricValue(dataItems, "oAlerting")}</td>
