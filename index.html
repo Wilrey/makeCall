@@ -113,6 +113,7 @@ if (window.location.hash) {
   console.log("token" + token);
   loadData();
 } else {
+  console.log("REDIRECT_URI: " + REDIRECT_URI);
   const queryStringData = {
     response_type: "token",
     client_id: CLIENT_ID,
