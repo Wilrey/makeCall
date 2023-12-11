@@ -87,13 +87,10 @@ function displayData(data) {
   if (data.results && Array.isArray(data.results)) {
     // Sort results by Queue ID and then by MediaType
     const sortedResults = data.results.sort((a, b) => {
-      // First, sort by Queue ID
       const queueIdComparison = a.group.queueId.localeCompare(b.group.queueId);
       if (queueIdComparison !== 0) {
         return queueIdComparison;
       }
-
-      // If Queue IDs are equal, sort by MediaType
       return (a.group.mediaType || '').localeCompare(b.group.mediaType || '');
     });
 
@@ -105,6 +102,7 @@ function displayData(data) {
                         <th>Waiting</th>
                         <th>Alerting</th>
                         <th>Member Users</th>
+                        <th>Longest Waiting</th>
                       </tr>`;
     queueData.append(headerRow);
 
@@ -115,6 +113,8 @@ function displayData(data) {
 
       const mediaType = group.mediaType || ''; // Handle cases where mediaType might be undefined
 
+      const longestWaitingDate = getObservationDate(dataItems);
+
       const row = `<tr>
                     <td>${group.queueId}</td>
                     <td>${mediaType}</td>
@@ -122,6 +122,29 @@ function displayData(data) {
                     <td>${getMetricValue(dataItems, "oWaiting")}</td>
                     <td>${getMetricValue(dataItems, "oAlerting")}</td>
                     <td>${getMetricValue(dataItems, "oMemberUsers")}</td>
+                    <td>${longestWaitingDate}</td>
+                  </tr>`;
+      queueData.append(row);
+    });
+  } else if (data.observations && Array.isArray(data.observations)) {
+    // Display header for notifications payload
+    const headerRow = `<tr>
+                        <th>Media Type</th>
+                        <th>Longest Waiting</th>
+                        <th>Conversation ID</th>
+                        <th>Session ID</th>
+                        <th>User ID</th>
+                      </tr>`;
+    queueData.append(headerRow);
+
+    // Render observations for notifications payload
+    data.observations.forEach(observation => {
+      const row = `<tr>
+                    <td>${observation.mediaType || ''}</td>
+                    <td>${observation.observationDate}</td>
+                    <td>${observation.conversationId}</td>
+                    <td>${observation.sessionId}</td>
+                    <td>${observation.userId}</td>
                   </tr>`;
       queueData.append(row);
     });
@@ -129,6 +152,16 @@ function displayData(data) {
     console.error('Invalid response format:', data);
   }
 }
+
+
+function getObservationDate(dataItems) {
+  const waitingData = dataItems.find(item => item.metric === "oWaiting");
+  if (waitingData && waitingData.observations && waitingData.observations.length > 0) {
+    return waitingData.observations[0].observationDate;
+  }
+  return '';
+}
+  
 function getMetricValue(dataItems, metricName) {
   const metricData = dataItems.find(item => item.metric === metricName);
   return metricData ? metricData.stats.count : 0;
