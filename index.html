@@ -90,20 +90,32 @@
   }
 
   function displayData(data) {
-    const queueData = $("#queueData");
-    queueData.empty();
+  const queueData = $("#queueData");
+  queueData.empty();
 
-    data.forEach(queue => {
+  if (data.results && Array.isArray(data.results)) {
+    data.results.forEach(result => {
+      const group = result.group;
+      const dataItems = result.data;
+
       const row = `<tr>
-                    <td>${queue.queueName}</td>
-                    <td>${queue.interactions}</td>
-                    <td>${queue.waiting}</td>
-                    <td>${queue.longestWaiting}</td>
-                    <td>${queue.agentsInQueue}</td>
+                    <td>${group.queueId}</td>
+                    <td>${getMetricValue(dataItems, "oInteracting")}</td>
+                    <td>${getMetricValue(dataItems, "oWaiting")}</td>
+                    <td>${getMetricValue(dataItems, "oAlerting")}</td>
+                    <td>${getMetricValue(dataItems, "oMemberUsers")}</td>
                   </tr>`;
       queueData.append(row);
     });
+  } else {
+    console.error('Invalid response format:', data);
   }
+}
+
+function getMetricValue(dataItems, metricName) {
+  const metricData = dataItems.find(item => item.metric === metricName);
+  return metricData ? metricData.stats.count : 0;
+}
 
   function refreshData() {
     loadData();
