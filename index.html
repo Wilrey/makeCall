@@ -28,7 +28,7 @@
 <script>
   const CLIENT_ID = 'ee4696b8-16c4-40ce-87ae-7322597880ac';
   const ENVIRONMENT = 'mypurecloud.de';
-  const apiEndpoint = "https://api.mypurecloud.de/api/v2/analytics/queues/observations/query";
+  const API_ENDPOINT = 'https://api.mypurecloud.de/api/v2/analytics/queues/observations/query';
   const REDIRECT_URI = 'https://wilrey.github.io/test/index.html';
 
   const requestData = {
@@ -76,7 +76,7 @@
     var token = getParameterByName('access_token');
 
     $.ajax({
-      url: apiEndpoint,
+      url: API_ENDPOINT,
       type: 'POST',
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
@@ -107,20 +107,19 @@
     loadData();
   }
 
-  // Initial data load
-  if (window.location.hash) {
-    console.log(location.hash);
-    loadData();
-    location.hash = '';
-  } else {
-    var queryStringData = {
-      response_type: 'token',
-      client_id: CLIENT_ID,
-      redirect_uri: REDIRECT_URI
-    };
-
-    window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
-  }
+// Check if there is a hash in the URL
+if (window.location.hash) {
+  const token = getParameterByName('access_token');
+  console.log("token" + token);
+  loadData();
+} else {
+  const queryStringData = {
+    response_type: "token",
+    client_id: CLIENT_ID,
+    redirect_uri: "https://wilrey.github.io/placeCall/index.html"
+  };
+  window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
+}
 
 </script>
 
