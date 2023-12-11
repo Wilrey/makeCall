@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Phone Number Verification</title>
-  </head>
-  <body>
-    <div class="container">
-      <form id="login">
-        <p>Enter your phone number (E.164 format):</p>
-        <p>Will place a call on behalf of queue: WF ATC id:07b54d9e-b08b-4587-a4bd-7e0055ebed0b</p>
-        <input id="phone" type="tel" name="phone" required>
-        <input type="submit" class="btn" value="Call">
-      </form>
-      <div class="alert"></div>
-    </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genesys Cloud API Demo</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script>
+<h1>Genesys Cloud API Demo</h1>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>User ID</th>
+      <th>User Name</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody id="userData"></tbody>
+</table>
+
+<script>
       
       // Make sure to enable Placing calls with another app? on Call -> Settings -> Phone Settings
       // Putting CSS, JavaScript, and HTML all together, to show all the code on a single page
 	    
       const CLIENT_ID = 'ee4696b8-16c4-40ce-87ae-7322597880ac';
       const ENVIRONMENT = 'mypurecloud.de';
-      const form = document.querySelector("#login");
-      const phoneInput = document.querySelector("#phone");
-      const info = document.querySelector(".alert");
+	const REDIRECT_URI = 'https://wilrey.github.io/placeCall/index.html';
 
-      form.addEventListener("submit", process);
-
-      function getParameterByName(name) {
-        name = name.replace(/[\\[]/, "\\[").replace(/[\]]/, "\\]");
-        var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
-          results = regex.exec(location.hash);
-        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-      }
+  function getParameterByName(name) {
+    name = name.replace(/[\\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.hash);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
 
       function process(event) {
         event.preventDefault();
@@ -44,46 +45,42 @@
         placeCall(phoneNumber, queue);
       }
 
-      function placeCall(phone, queue) {
-        var token = getParameterByName('access_token');
-        $.ajax({
-          url: `https://api.${ENVIRONMENT}/api/v2/conversations/calls`,
-          type: "post",
-          data: JSON.stringify({
-            "phoneNumber": phone,
-            "callFromQueueId": queue
-          }),
-          contentType: "application/json; charset=utf-8",
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader('Authorization', 'bearer ' + token);
-          },
-          success: function(data) {
-            console.log(data);
-          }
-        });
-      }
+  if (window.location.hash) {
+    console.log(location.hash);
+    var token = getParameterByName('access_token');
 
-      if (window.location.hash) {
-        var token = getParameterByName('access_token');
-        console.log("token" + token);
-        $.ajax({
-          url: `https://api.${ENVIRONMENT}/api/v2/users/me`,
-          type: "GET",
-          beforeSend: function(xhr) {
-            xhr.setRequestHeader('Authorization', 'bearer ' + token);
-          },
-          success: function(data) {
-            console.log(data);
-          }
-        });
-      } else {
-        var queryStringData = {
-          response_type: "token",
-          client_id: CLIENT_ID,
-          redirect_uri: "https://wilrey.github.io/placeCall/index.html"
-        }
-        window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
+    $.ajax({
+      url: `https://api.${ENVIRONMENT}/api/v2/users/me`,
+      type: 'GET',
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      },
+      success: function(data) {
+        displayUserData(data);
       }
-    </script>
-  </body>
+    });
+
+    location.hash = '';
+  } else {
+    var queryStringData = {
+      response_type: 'token',
+      client_id: CLIENT_ID,
+      redirect_uri: REDIRECT_URI
+    };
+
+    window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
+  }
+  function displayUserData(userData) {
+    const userDataElement = $('#userData');
+    userDataElement.empty();
+
+    const row = `<tr>
+                  <td>${userData.id || ''}</td>
+                  <td>${userData.name || ''}</td>
+                  <td>${userData.email || ''}</td>
+                </tr>`;
+    userDataElement.append(row);
+  }
+</script>
+</body>
 </html>
