@@ -85,6 +85,18 @@ function displayData(data) {
   queueData.empty();
 
   if (data.results && Array.isArray(data.results)) {
+    // Sort results by Queue ID and then by MediaType
+    const sortedResults = data.results.sort((a, b) => {
+      // First, sort by Queue ID
+      const queueIdComparison = a.group.queueId.localeCompare(b.group.queueId);
+      if (queueIdComparison !== 0) {
+        return queueIdComparison;
+      }
+
+      // If Queue IDs are equal, sort by MediaType
+      return (a.group.mediaType || '').localeCompare(b.group.mediaType || '');
+    });
+
     // Display header with Queue ID and MediaType columns
     const headerRow = `<tr>
                         <th>Queue ID</th>
@@ -96,7 +108,8 @@ function displayData(data) {
                       </tr>`;
     queueData.append(headerRow);
 
-    data.results.forEach(result => {
+    // Render sorted results
+    sortedResults.forEach(result => {
       const group = result.group;
       const dataItems = result.data;
 
@@ -116,7 +129,6 @@ function displayData(data) {
     console.error('Invalid response format:', data);
   }
 }
-
 function getMetricValue(dataItems, metricName) {
   const metricData = dataItems.find(item => item.metric === metricName);
   return metricData ? metricData.stats.count : 0;
