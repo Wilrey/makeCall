@@ -13,9 +13,7 @@
 <table border="1">
 <tbody id="queueData"></tbody>
 </table>
-
 <button onclick="refreshData()">Refresh Data</button>
-
 <script>
   const CLIENT_ID = '50999a4b-409c-4846-a249-4357e0e293a5';
   const ENVIRONMENT = 'mypurecloud.de';
@@ -132,7 +130,6 @@ function displayData(data) {
       const dataItems = result.data;
       const mediaType = group.mediaType || '';
       const longestWaitingDate = getObservationDate(dataItems);
-
       const row = `<tr>
                     <td>${queues[group.queueId].name}</td>
                     <td>${mediaType}</td>
@@ -166,8 +163,6 @@ function getMetricValue(dataItems, metricName) {
     loadData();
   }
 
-  
-  console.log("HOLA");
 // Check if there is a hash in the URL
 if (window.location.hash) {
   const token = getParameterByName('access_token');
@@ -184,6 +179,5 @@ if (window.location.hash) {
 }
 
 </script>
-
 </body>
 </html>
