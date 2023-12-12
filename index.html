@@ -103,12 +103,6 @@ function displayData(data) {
         return queueIdComparison;
       }
 
-      // Filter out undesired media types
-      const undesiredMediaTypes = ["message", "chat", "email"];
-      if (undesiredMediaTypes.includes(a.group.mediaType) || undesiredMediaTypes.includes(b.group.mediaType)) {
-        return 0; // Equal for undesired media types, maintaining the order within the same queue
-      }
-
       return (a.group.mediaType || '').localeCompare(b.group.mediaType || '');
     });
 
@@ -123,7 +117,8 @@ function displayData(data) {
                         <th>Longest Waiting</th>
                       </tr>`;
     queueData.append(headerRow);
-
+const undesiredMediaTypes = ["callback", "chat", "email"];
+      
     // Render sorted results
     sortedResults.forEach(result => {
       const group = result.group;
@@ -139,7 +134,11 @@ function displayData(data) {
                     <td>${getMetricValue(dataItems, "oMemberUsers")}</td>
                     <td>${longestWaitingDate}</td>
                   </tr>`;
-      queueData.append(row);
+      
+if (!undesiredMediaTypes.includes(mediaType)) {
+  queueData.append(row);
+}
+      
     });
   } else {
     console.error('Invalid response format:', data);
