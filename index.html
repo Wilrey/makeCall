@@ -130,9 +130,7 @@ function displayData(data) {
     sortedResults.forEach(result => {
       const group = result.group;
       const dataItems = result.data;
-
-      const mediaType = group.mediaType || ''; // Handle cases where mediaType might be undefined
-
+      const mediaType = group.mediaType || '';
       const longestWaitingDate = getObservationDate(dataItems);
 
       const row = `<tr>
@@ -143,28 +141,6 @@ function displayData(data) {
                     <td>${getMetricValue(dataItems, "oAlerting")}</td>
                     <td>${getMetricValue(dataItems, "oMemberUsers")}</td>
                     <td>${longestWaitingDate}</td>
-                  </tr>`;
-      queueData.append(row);
-    });
-  } else if (data.observations && Array.isArray(data.observations)) {
-    // Display header for notifications payload
-    const headerRow = `<tr>
-                        <th>Media Type</th>
-                        <th>Longest Waiting</th>
-                        <th>Conversation ID</th>
-                        <th>Session ID</th>
-                        <th>User ID</th>
-                      </tr>`;
-    queueData.append(headerRow);
-
-    // Render observations for notifications payload
-    data.observations.forEach(observation => {
-      const row = `<tr>
-                    <td>${observation.mediaType || ''}</td>
-                    <td>${observation.observationDate}</td>
-                    <td>${observation.conversationId}</td>
-                    <td>${observation.sessionId}</td>
-                    <td>${observation.userId}</td>
                   </tr>`;
       queueData.append(row);
     });
