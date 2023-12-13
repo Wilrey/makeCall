@@ -250,7 +250,7 @@ function displayData(data) {
   if (data.results && Array.isArray(data.results)) {
     // Sort results by Queue ID and then by MediaType
     const sortedResults = data.results.sort((a, b) => {
-      const queueIdComparison = a.group.queueId.localeCompare(b.group.queueId);
+      const queueIdComparison = queues[a.group.queueId].name.localeCompare(queues[b.group.queueId].name);
       if (queueIdComparison !== 0) {
         return queueIdComparison;
       }
