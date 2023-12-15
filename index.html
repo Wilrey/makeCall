@@ -1,19 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Genesys Cloud API Demo</title>
+  <title>Visualizador de KPIs por cola</title>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+  table.redTable {
+  border: 1px solid #03010C;
+  background-color: #EEEEEE;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.redTable td, table.redTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.redTable tbody td {
+  font-size: 13px;
+}
+table.redTable tr:nth-child(even) {
+  background: #F5D6D6;
+}
+table.redTable thead {
+  background: #F20F21;
+  background: -moz-linear-gradient(top, #f54b58 0%, #f32737 66%, #F20F21 100%);
+  background: -webkit-linear-gradient(top, #f54b58 0%, #f32737 66%, #F20F21 100%);
+  background: linear-gradient(to bottom, #f54b58 0%, #f32737 66%, #F20F21 100%);
+  border-bottom: 2px solid #444444;
+}
+table.redTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+}
+table.redTable thead th:first-child {
+  border-left: none;
+}
+
+table.redTable tfoot {
+  font-size: 14px;
+  font-weight: bold;
+  color: #FFFFFF;
+  background: #D0E4F5;
+  background: -moz-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: -webkit-linear-gradient(top, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  background: linear-gradient(to bottom, #dcebf7 0%, #d4e6f6 66%, #D0E4F5 100%);
+  border-top: 2px solid #444444;
+}
+table.redTable tfoot td {
+  font-size: 14px;
+}
+table.redTable tfoot .links {
+  text-align: right;
+}
+table.redTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+  </style>
 </head>
 <body>
+<center>
+<h1>Visualizador de KPIs por cola</h1>
 
-<h1>Genesys Cloud API Demo</h1>
-
-<table border="1">
+<table class="redTable">
 <tbody id="queueData"></tbody>
 </table>
-<button onclick="refreshData()">Refresh Data</button>
+<button onclick="refreshData()">Refrescar Datos</button>
 <script>
   const CLIENT_ID = '50999a4b-409c-4846-a249-4357e0e293a5';
   const ENVIRONMENT = 'mypurecloud.de';
@@ -260,12 +319,12 @@ function displayData(data) {
 
     // Display header with Queue ID and MediaType columns
     const headerRow = `<tr>
-                        <th>Queue ID</th>
-                        <th>Media Type</th>
+                        <th>Nombre de la cola</th>
+                        <th>Tipo</th>
                         <th>Interacting</th>
                         <th>Waiting</th>
                         <th>Alerting</th>
-                        <th>Member Users</th>
+                        <th>Miembros</th>
                         <th>Longest Waiting</th>
                       </tr>`;
     queueData.append(headerRow);
@@ -330,5 +389,6 @@ if (window.location.hash) {
 }
 
 </script>
+</center>
 </body>
 </html>
